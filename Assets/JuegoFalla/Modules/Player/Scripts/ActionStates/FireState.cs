@@ -9,7 +9,7 @@ public class FireState : ActionBaseState
     public override void Enter()
     {
         // Aquí podrías poner una animación de "fuego" o algo similar
-        player.Anim.SetBool("IsFiring", true);
+        player.anim.SetBool("IsFiring", true);
         Debug.Log("Entrando al estado de disparo");
     }
 
@@ -17,7 +17,7 @@ public class FireState : ActionBaseState
     {
         // En este estado estamos "disparando", podrías manejar la lógica de disparo aquí, como instanciar proyectiles, etc.
         // Por simplicidad, vamos a volver al estado neutral después de un tiempo o cuando se suelte el botón de disparo
-        if (player.Inputs.InputActions.Player.Fire.WasReleasedThisFrame())
+        if (player.inputs.InputActions.Player.Fire.WasReleasedThisFrame())
         {
             player.ActionSM.ChangeState(new NeutralState(player));
         }
@@ -26,7 +26,7 @@ public class FireState : ActionBaseState
     public override void Exit()
     {
         // No hay nada específico que hacer al salir de este estado
-        player.Anim.SetBool("IsFiring", false);
+        player.anim.SetBool("IsFiring", false);
     }
 
     public override void FixedUpdate()

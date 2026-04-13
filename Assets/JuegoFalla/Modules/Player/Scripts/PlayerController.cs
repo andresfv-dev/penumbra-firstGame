@@ -7,9 +7,12 @@ public class PlayerController : MonoBehaviour
     public StateMachine ActionSM { get; private set; }
 
     // Referencias a componentes
-    public CharacterController Controller;
-    public Animator Anim;
-    public InputReader Inputs;
+    public CharacterController controller;
+    public Animator anim;
+    public InputReader inputs;
+    public PlayerStatsSO statsConfig; //Scriptable Object con los valores base
+    public PlayerStats stats; //Componente con los valores actuales
+    public MovementController movementController;
 
     private void Awake()
     {
@@ -20,13 +23,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        Inputs.Initialize();
-        Inputs.FireEvent += () => ActionSM.ChangeState(new FireState(this));
+        inputs.Initialize();
+        inputs.FireEvent += () => ActionSM.ChangeState(new FireState(this));
     }
 
     private void OnDisable()
     {
-        Inputs.FireEvent -= () => ActionSM.ChangeState(new FireState(this));
+        inputs.FireEvent -= () => ActionSM.ChangeState(new FireState(this));
     }
 
     private void Start()
@@ -41,6 +44,7 @@ public class PlayerController : MonoBehaviour
         MovementSM.CurrentState.Update();
         ActionSM.CurrentState.Update();
 
+        movementController.ApplyGravity();
         //Debug.Log($"MoveState received input: {Inputs.MoveValue}");
         //Debug.Log($"Input magnitude: {Inputs.MoveValue.magnitude}");
     }

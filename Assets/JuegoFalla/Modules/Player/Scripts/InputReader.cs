@@ -12,6 +12,9 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
     // Valores para acciones continuas (Moverse, Mirar)
     public Vector2 MoveValue { get; private set; }
     public bool IsAttacking { get; private set; }
+    public bool IsSprinting { get; private set; }
+    [SerializeField] private bool useToggleSprint; // Esto lo puedes cambiar desde opciones
+
 
     private PlayerInputActions _inputActions;
     public PlayerInputActions InputActions => _inputActions;
@@ -31,4 +34,19 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
     public void OnJump(InputAction.CallbackContext context) { if (context.performed) JumpEvent.Invoke(); }
     public void OnFire(InputAction.CallbackContext context) { if (context.performed) FireEvent.Invoke(); }
     public void OnAttack(InputAction.CallbackContext context) { IsAttacking = context.ReadValueAsButton(); }
+
+
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        if (useToggleSprint)
+        {
+            if (context.performed) IsSprinting = !IsSprinting;
+        }
+        else
+        {
+            if (context.performed) IsSprinting = true;
+            if (context.canceled) IsSprinting = false;
+        }
+    }
 }

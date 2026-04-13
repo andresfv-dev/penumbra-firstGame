@@ -9,7 +9,7 @@ public class AttackState : ActionBaseState
     public override void Enter()
     {
         // Aquí podrías poner una animación de ataque o algo similar
-        player.Anim.SetBool("IsAttacking", true);
+        player.anim.SetBool("IsAttacking", true);
         Debug.Log("Entrando al estado de ataque");
     }
 
@@ -23,14 +23,14 @@ public class AttackState : ActionBaseState
         }*/
         // Si el jugador soltó el botón, le avisamos al Animator
 
-        bool isAttacking = player.Inputs.IsAttacking;
-        player.Anim.SetBool("IsAttacking", isAttacking);
+        bool isAttacking = player.inputs.IsAttacking;
+        player.anim.SetBool("IsAttacking", isAttacking);
 
         if (!isAttacking)
         {
 
             // Verificamos si ya volvimos a la animación base para salir del estado
-            AnimatorStateInfo stateInfo = player.Anim.GetCurrentAnimatorStateInfo(1); // Capa 1 (Combate)
+            AnimatorStateInfo stateInfo = player.anim.GetCurrentAnimatorStateInfo(1); // Capa 1 (Combate)
             if (!stateInfo.IsTag("Attack"))
             {
                 player.ActionSM.ChangeState(new NeutralState(player));
@@ -41,7 +41,7 @@ public class AttackState : ActionBaseState
     public override void Exit()
     {
         // Aquí podrías limpiar cualquier estado relacionado con el ataque si es necesario
-        player.Anim.SetBool("IsAttacking", false);
+        player.anim.SetBool("IsAttacking", false);
         Debug.Log("Saliendo del estado de ataque");
     }
 

@@ -8,7 +8,7 @@ public abstract class ActionBaseState : IState
     public ActionBaseState(PlayerController player)
     {
         this.player = player;
-        this.input = player.Inputs;
+        this.input = player.inputs;
         movementController = player.GetComponent<MovementController>();
     }
     public abstract void Enter();

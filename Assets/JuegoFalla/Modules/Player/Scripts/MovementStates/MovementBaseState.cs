@@ -8,8 +8,8 @@ public abstract class MovementBaseState : IState
     public MovementBaseState(PlayerController player)
     {
         this.player = player;
-        this.input = player.Inputs;
-        movementController = player.GetComponent<MovementController>();
+        this.input = player.inputs;
+        movementController = player.movementController; ;
     }
     public abstract void Enter();
     public abstract void Update();

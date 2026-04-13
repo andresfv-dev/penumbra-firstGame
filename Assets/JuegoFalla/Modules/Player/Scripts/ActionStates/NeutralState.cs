@@ -9,13 +9,13 @@ public class NeutralState : ActionBaseState
     public override void Enter()
     {
         // Aquí podrías poner una animación de "neutral" o algo similar
-        player.Anim.SetBool("IsAttacking", false);
+        player.anim.SetBool("IsAttacking", false);
     }
 
     public override void Update()
     {
         // En este estado no hacemos nada, solo esperamos a que el jugador ataque
-        if (player.Inputs.InputActions.Player.Attack.WasPressedThisFrame())
+        if (player.inputs.InputActions.Player.Attack.WasPressedThisFrame())
         {
             player.ActionSM.ChangeState(new AttackState(player));
         }

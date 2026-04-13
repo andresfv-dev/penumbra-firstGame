@@ -9,16 +9,20 @@ public class IdleState : MovementBaseState
     public override void Enter()
     {
         // Aquí puedes poner la animación de idle, por ejemplo
-        player.Anim.SetFloat("Speed", 0f);
+        player.anim.SetFloat("Speed", 0f);
     }
 
     public override void Update()
     {
-        Vector2 input = player.Inputs.MoveValue;
+        Vector2 input = player.inputs.MoveValue;
         // Si el jugador empieza a moverse, cambiamos al estado de movimiento
+        if (player.inputs.IsSprinting && player.stats.CanSprint)
+        {
+            player.MovementSM.ChangeState(new RunState(player));
+        }
         if (input.sqrMagnitude > 0.01f)
         {
-            player.MovementSM.ChangeState(new MoveState(player));
+            player.MovementSM.ChangeState(new WalkState(player));
         }
     }
 

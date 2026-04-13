@@ -5,7 +5,7 @@ public class MovementController : MonoBehaviour
     private CharacterController characterController;
 
     [Header("Settings")]
-    public float speed = 5f;
+
     public float gravity = -9.81f;
     [Header("Ground Check")]
     public float groundCheckRadius = 0.4f;
@@ -20,10 +20,10 @@ public class MovementController : MonoBehaviour
     }
 
     //Este método lo llamará el PlayerState o una IA de enemigo
-    public void Move(Vector2 input)
+    public void Move(Vector2 input, float speed)
     {
         Vector3 move = transform.right * input.x + transform.forward * input.y;
-        characterController.Move(move * speed * Time.deltaTime);
+        characterController.Move(speed * Time.deltaTime * move);
 
         // Aplicar gravedad
         ApplyGravity();

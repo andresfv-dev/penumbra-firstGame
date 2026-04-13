@@ -243,9 +243,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 211739172}
-  - component: {fileID: 211739171}
   - component: {fileID: 211739170}
-  - component: {fileID: 211739174}
   - component: {fileID: 211739169}
   - component: {fileID: 211739173}
   m_Layer: 0
@@ -286,42 +284,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5059c41fd45194480ecf6571058828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Player::PlayerController
-  controller: {fileID: 211739173}
-  anim: {fileID: 872804533}
-  inputs: {fileID: 11400000, guid: 381bc6ae9b9ea2a49b9ed8428da2aa32, type: 2}
-  statsConfig: {fileID: 11400000, guid: 3d35a1b1e8dfe9040bd77c611779bea3, type: 2}
-  stats: {fileID: 211739174}
-  movementController: {fileID: 211739169}
---- !u!114 &211739171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 211739168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: c5a0102391852c341aafafe1099a70dd, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  controller: {fileID: 0}
+  anim: {fileID: 0}
+  inputs: {fileID: 0}
+  stats: {fileID: 0}
 --- !u!4 &211739172
 Transform:
   m_ObjectHideFlags: 0
@@ -365,23 +331,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &211739174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 211739168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdb29b1d0f14fb04d98f997990eddc45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Project.Player::PlayerStats
-  currentHealth: 100
-  currentStamina: 100
-  currentHunger: 100
-  currentThirst: 100
-  currentSpeed: 0
 --- !u!1001 &254000706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -940,11 +889,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &872804533 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 491502f3149b0dd42b73e55116f4a019, type: 3}
-  m_PrefabInstance: {fileID: 254000706}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1487269703
 GameObject:
   m_ObjectHideFlags: 0
