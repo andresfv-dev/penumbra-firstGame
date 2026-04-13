@@ -29,6 +29,33 @@ public class MovementController : MonoBehaviour
         ApplyGravity();
     }
 
+    public void Move(Vector2 input, float speed, Transform cameraTransform)
+    {
+        if (input.sqrMagnitude < 0.01f) return;
+
+        // 1. Obtener los vectores de la cámara
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+
+        // 2. "Aplanar" los vectores (importante para que no camine hacia el suelo)
+        forward.y = 0;
+        right.y = 0;
+        forward.Normalize();
+        right.Normalize();
+
+        // 3. Calcular dirección deseada
+        Vector3 desiredDirection = forward * input.y + right * input.x;
+
+        // 4. Rotar suavemente hacia la dirección de movimiento
+        Quaternion targetRotation = Quaternion.LookRotation(desiredDirection);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 15f);
+
+        // 5. Mover
+        characterController.Move(desiredDirection * speed * Time.deltaTime);
+
+        ApplyGravity();
+    }
+
     public void ApplyGravity()
     {
         if (velocity.y < 0 && IsGrounded())
@@ -48,6 +75,8 @@ public class MovementController : MonoBehaviour
     {
         return characterController.velocity.magnitude > 0.1f;
     }
+
+
 
 #if UNITY_EDITOR
     //Método de gizmos para visualizar el área de chequeo de suelo en el editor
