@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     // Referencias a componentes
     public CharacterController Controller;
     public Animator Anim;
-    public PlayerInputActions Inputs; // Generado por el Input System
+    public InputReader Inputs;
 
     private void Awake()
     {
@@ -20,14 +20,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        if (Inputs == null) Inputs = new PlayerInputActions();
-        Inputs.Enable();
-        Inputs.Player.Fire.performed += ctx => ActionSM.ChangeState(new FireState(this));
+        Inputs.Initialize();
+        Inputs.FireEvent += () => ActionSM.ChangeState(new FireState(this));
     }
 
     private void OnDisable()
     {
-        Inputs.Disable();
+        Inputs.FireEvent -= () => ActionSM.ChangeState(new FireState(this));
     }
 
     private void Start()
@@ -41,5 +40,8 @@ public class PlayerController : MonoBehaviour
     {
         MovementSM.CurrentState.Update();
         ActionSM.CurrentState.Update();
+
+        //Debug.Log($"MoveState received input: {Inputs.MoveValue}");
+        //Debug.Log($"Input magnitude: {Inputs.MoveValue.magnitude}");
     }
 }

@@ -17,7 +17,7 @@ public class FireState : ActionBaseState
     {
         // En este estado estamos "disparando", podrías manejar la lógica de disparo aquí, como instanciar proyectiles, etc.
         // Por simplicidad, vamos a volver al estado neutral después de un tiempo o cuando se suelte el botón de disparo
-        if (player.Inputs.Player.Fire.WasReleasedThisFrame())
+        if (player.Inputs.InputActions.Player.Fire.WasReleasedThisFrame())
         {
             player.ActionSM.ChangeState(new NeutralState(player));
         }

@@ -15,7 +15,7 @@ public class NeutralState : ActionBaseState
     public override void Update()
     {
         // En este estado no hacemos nada, solo esperamos a que el jugador ataque
-        if (player.Inputs.Player.Attack.WasPressedThisFrame())
+        if (player.Inputs.InputActions.Player.Attack.WasPressedThisFrame())
         {
             player.ActionSM.ChangeState(new AttackState(player));
         }

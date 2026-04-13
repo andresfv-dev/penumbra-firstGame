@@ -14,7 +14,7 @@ public class IdleState : MovementBaseState
 
     public override void Update()
     {
-        Vector2 input = player.Inputs.Player.Move.ReadValue<Vector2>();
+        Vector2 input = player.Inputs.MoveValue;
         // Si el jugador empieza a moverse, cambiamos al estado de movimiento
         if (input.sqrMagnitude > 0.01f)
         {

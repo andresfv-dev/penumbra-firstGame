@@ -288,6 +288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Project.Player::PlayerController
   Controller: {fileID: 211739173}
   Anim: {fileID: 872804533}
+  Inputs: {fileID: 11400000, guid: 381bc6ae9b9ea2a49b9ed8428da2aa32, type: 2}
 --- !u!114 &211739171
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,16 +8,15 @@ public class MoveState : MovementBaseState
 
     public override void Enter()
     {
-        Debug.Log("Entering Move State");
+        //Debug.Log("Entering Move State"); 
     }
 
     public override void Update()
     {
         //Leemos el input desde el PlayerController
-        Vector2 input = player.Inputs.Player.Move.ReadValue<Vector2>();
-        Debug.Log($"MoveState received input: {input}");
+        Vector2 input = player.Inputs.MoveValue;
         float inputMagnitude = input.magnitude;
-        Debug.Log($"Input magnitude: {inputMagnitude}");
+
         player.Anim.SetFloat("Speed", inputMagnitude, 0.1f, Time.deltaTime);
 
         //Movemos al personaje usando el MovementController
