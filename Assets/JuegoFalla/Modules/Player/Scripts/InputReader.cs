@@ -8,6 +8,7 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
     // Eventos para acciones discretas (Saltar, Disparar)
     public event Action JumpEvent = delegate { };
     public event Action FireEvent = delegate { };
+    public event Action InteractEvent = delegate { };
 
     // Valores para acciones continuas (Moverse, Mirar)
     public Vector2 MoveValue { get; private set; }
@@ -47,6 +48,16 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
         {
             if (context.performed) IsSprinting = true;
             if (context.canceled) IsSprinting = false;
+        }
+    }
+
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        // Solo disparamos cuando se presiona la tecla (performed)
+        if (context.performed)
+        {
+            InteractEvent.Invoke();
         }
     }
 }
