@@ -291,7 +291,7 @@ MonoBehaviour:
   statsConfig: {fileID: 11400000, guid: 3d35a1b1e8dfe9040bd77c611779bea3, type: 2}
   stats: {fileID: 211739174}
   movementController: {fileID: 211739169}
-  virtualCamera: {fileID: 0}
+  virtualCamera: {fileID: 1838898363}
 --- !u!4 &211739172
 Transform:
   m_ObjectHideFlags: 0
