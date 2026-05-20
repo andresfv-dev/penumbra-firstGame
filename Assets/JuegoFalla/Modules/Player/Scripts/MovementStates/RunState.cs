@@ -29,8 +29,8 @@ public class RunState : MovementBaseState
             return;
         }
 
-        // 3. Ejecutar Movimiento
-        movementController.Move(input, player.statsConfig.sprintSpeed, player.MainCameraTransform);
+        // 3. Ejecutar Movimiento (FP)
+        movementController.MoveFP(input, player.statsConfig.sprintSpeed, player.MainCameraTransform);
 
         // 4. Actualizar Animator (Normalizado: 1 = Correr)
         player.anim.SetFloat("Speed", 1f, 0.1f, Time.deltaTime);

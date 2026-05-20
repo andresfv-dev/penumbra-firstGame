@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [Header("Camera References")]
     [SerializeField] private CinemachineCamera virtualCamera; // Para control específico
 
+    // Cache para el estado de fuego (reutilizar la instancia)
+    private FireState _fireState;
+
     // Lo que realmente necesitamos para el movimiento relativo:
     public Transform MainCameraTransform { get; private set; }
 
@@ -34,12 +37,19 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         inputs.Initialize();
-        inputs.FireEvent += () => ActionSM.ChangeState(new FireState(this));
+        inputs.FireEvent += OnFire;
     }
 
     private void OnDisable()
     {
-        inputs.FireEvent -= () => ActionSM.ChangeState(new FireState(this));
+        inputs.FireEvent -= OnFire;
+    }
+
+    private void OnFire()
+    {
+        // Reutilizamos la instancia del estado para evitar crear objetos constantemente
+        if (_fireState == null) _fireState = new FireState(this);
+        ActionSM.ChangeState(_fireState);
     }
 
     private void Start()

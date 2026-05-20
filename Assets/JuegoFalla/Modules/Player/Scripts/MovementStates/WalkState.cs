@@ -19,8 +19,8 @@ public class WalkState : MovementBaseState
 
         player.anim.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
 
-        //Movemos al personaje usando el MovementController
-        movementController.Move(input, player.statsConfig.walkSpeed, player.MainCameraTransform);
+        // Movemos al personaje usando el MovementController en modo FP
+        movementController.MoveFP(input, player.statsConfig.walkSpeed, player.MainCameraTransform);
         if (input == Vector2.zero)
         {
             player.MovementSM.ChangeState(new IdleState(player));
