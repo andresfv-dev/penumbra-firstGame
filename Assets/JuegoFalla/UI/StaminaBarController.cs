@@ -1,21 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// Controla una barra de stamina que se consume desde ambos bordes hacia el centro.
-// Requiere dos RectTransforms hijos: leftFill (anclado a la izquierda, pivot x=0)
-// y rightFill (anclado a la derecha, pivot x=1). Ambos deben tener la misma altura.
+// Controla una barra de stamina usando UNA sola imagen que se reduce desde ambos bordes hacia el centro.
+// Requiere:
+// - container: RectTransform que define el ancho total de la barra
+// - fill: RectTransform del image que estará centrada y reducirá su ancho
 public class StaminaBarController : MonoBehaviour
 {
     [Header("UI References")]
     public RectTransform container; // contenedor de la barra (usa su width)
-    public RectTransform leftFill;   // anclado a la izquierda (pivot 0.5 o 0)
-    public RectTransform rightFill;  // anclado a la derecha (pivot 1)
+    public RectTransform fill;      // imagen única centrada que se hace más angosta
 
     [Header("Player Stats")]
     public PlayerStats playerStats; // referencia al componente PlayerStats
     public PlayerStatsSO statsConfig; // para obtener maxStamina
 
-    [Header("Smoothing")]
+    [Header("Behavior")]
+    [Range(0f, 0.2f)]
+    public float minWidthFraction = 0.02f; // ancho mínimo relativo cuando stamina = 0
     public float smoothSpeed = 10f;
 
     float shownNormalized = 1f;
@@ -23,66 +25,52 @@ public class StaminaBarController : MonoBehaviour
     void Start()
     {
         if (container == null) container = GetComponent<RectTransform>();
-        if (playerStats == null)
-        {
-            Debug.LogWarning("StaminaBarController: playerStats no asignado.");
-        }
-        if (statsConfig == null && playerStats != null)
-        {
-            Debug.LogWarning("StaminaBarController: statsConfig no asignado. Usa playerStatsConfig manualmente.");
-        }
+        if (playerStats == null) Debug.LogWarning("StaminaBarController: playerStats no asignado.");
+        if (statsConfig == null && playerStats != null) Debug.LogWarning("StaminaBarController: statsConfig no asignado.");
 
-        // Suscribirse al evento para actualización instantánea
-        if (playerStats != null)
-        {
-            playerStats.OnStaminaChanged += OnStaminaChanged;
-        }
+        if (playerStats != null) playerStats.OnStaminaChanged += OnStaminaChanged;
     }
 
     void Update()
     {
-        if (playerStats == null || statsConfig == null || container == null || leftFill == null || rightFill == null) return;
+        if (playerStats == null || statsConfig == null || container == null || fill == null) return;
 
         float target = Mathf.Clamp01(playerStats.currentStamina / statsConfig.maxStamina);
         shownNormalized = Mathf.MoveTowards(shownNormalized, target, Time.deltaTime * smoothSpeed);
 
         float totalWidth = container.rect.width;
-        float halfWidth = totalWidth * shownNormalized * 0.5f;
+        float clamped = Mathf.Max(minWidthFraction, shownNormalized);
+        float newWidth = totalWidth * clamped;
 
-        Vector2 leftSize = leftFill.sizeDelta;
-        Vector2 rightSize = rightFill.sizeDelta;
+        Vector2 size = fill.sizeDelta;
+        size.x = newWidth;
+        fill.sizeDelta = size;
 
-        leftSize.x = halfWidth;
-        rightSize.x = halfWidth;
-
-        leftFill.sizeDelta = leftSize;
-        rightFill.sizeDelta = rightSize;
+        // Centrar fill: asumiendo anchors centrados, anchoredPosition = 0
+        fill.anchoredPosition = Vector2.zero;
     }
 
     private void OnDestroy()
     {
-        if (playerStats != null)
-            playerStats.OnStaminaChanged -= OnStaminaChanged;
+        if (playerStats != null) playerStats.OnStaminaChanged -= OnStaminaChanged;
     }
 
     private void OnStaminaChanged(float value)
     {
-        // Actualiza instantáneamente el objetivo para que el UI responda incluso fuera de Update
         float target = Mathf.Clamp01(value / statsConfig.maxStamina);
-        shownNormalized = target; // permitimos que Update haga smoothing desde este valor
+        shownNormalized = target; // el smoothing en Update hace la animación
     }
 
-    // Ajuste rápido por código si necesitas actualizar instantáneamente
     public void SetNormalizedInstant(float normalized)
     {
         shownNormalized = Mathf.Clamp01(normalized);
+        if (container == null || fill == null) return;
         float totalWidth = container.rect.width;
-        float halfWidth = totalWidth * shownNormalized * 0.5f;
-        Vector2 leftSize = leftFill.sizeDelta;
-        Vector2 rightSize = rightFill.sizeDelta;
-        leftSize.x = halfWidth;
-        rightSize.x = halfWidth;
-        leftFill.sizeDelta = leftSize;
-        rightFill.sizeDelta = rightSize;
+        float clamped = Mathf.Max(minWidthFraction, shownNormalized);
+        float newWidth = totalWidth * clamped;
+        Vector2 size = fill.sizeDelta;
+        size.x = newWidth;
+        fill.sizeDelta = size;
+        fill.anchoredPosition = Vector2.zero;
     }
 }

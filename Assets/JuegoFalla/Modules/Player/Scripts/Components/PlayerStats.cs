@@ -23,10 +23,15 @@ public class PlayerStats : MonoBehaviour
     // Evento simple para notificar cambios de stamina (puede ser útil para UI)
     public event System.Action<float> OnStaminaChanged = delegate { };
 
-    // Llamar después de cada cambio significativo en stamina
+    // Emitir evento solo cuando cambia la stamina para evitar sobrecarga
+    private float _lastStaminaSent = -1f;
     private void LateUpdate()
     {
-        OnStaminaChanged.Invoke(currentStamina);
+        if (!Mathf.Approximately(_lastStaminaSent, currentStamina))
+        {
+            _lastStaminaSent = currentStamina;
+            OnStaminaChanged.Invoke(currentStamina);
+        }
     }
 
     public void Awake()
