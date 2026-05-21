@@ -15,11 +15,18 @@ public class IdleState : MovementBaseState
     public override void Update()
     {
         Vector2 input = player.inputs.MoveValue;
-        // Si el jugador empieza a moverse, cambiamos al estado de movimiento
-        // No iniciamos RunState explícito aquí: el WalkState manejará sprint internamente
+        // Si el jugador empieza a moverse, cambiamos al estado de movimiento correspondiente
         if (input.sqrMagnitude > 0.01f)
         {
-            player.MovementSM.ChangeState(new WalkState(player));
+            // Si está sprintando y tiene stamina, va directo a RunState
+            if (player.inputs.IsSprinting && player.stats.CanSprint)
+            {
+                player.MovementSM.ChangeState(new RunState(player));
+            }
+            else
+            {
+                player.MovementSM.ChangeState(new WalkState(player));
+            }
         }
     }
 

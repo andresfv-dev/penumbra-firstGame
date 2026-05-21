@@ -14,7 +14,6 @@ public class RunState : MovementBaseState
     {
         Vector2 input = player.inputs.MoveValue;
 
-        // RunState queda como respaldo si querés lógica separada, pero en FP simplificamos:
         // Si no hay input, volvemos a Idle
         if (input == Vector2.zero)
         {
@@ -22,14 +21,14 @@ public class RunState : MovementBaseState
             return;
         }
 
-        // Si no está sprintando o se quedó sin stamina, volvemos a Walk (que ahora maneja sprint internamente)
+        // Si no está sprintando o se quedó sin stamina, volvemos a WalkState
         if (!player.inputs.IsSprinting || !player.stats.CanSprint)
         {
             player.MovementSM.ChangeState(new WalkState(player));
             return;
         }
 
-        // Ejecutar movimiento (sprint)
+        // Ejecutar movimiento a velocidad de sprint y consumir stamina
         movementController.MoveFP(input, player.statsConfig.sprintSpeed, player.MainCameraTransform);
         player.anim.SetFloat("Speed", 1f, 0.1f, Time.deltaTime);
         player.stats.ConsumeStamina(player.statsConfig.staminaBurnRate);
