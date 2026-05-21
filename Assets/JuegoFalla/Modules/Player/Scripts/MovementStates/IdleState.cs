@@ -16,10 +16,7 @@ public class IdleState : MovementBaseState
     {
         Vector2 input = player.inputs.MoveValue;
         // Si el jugador empieza a moverse, cambiamos al estado de movimiento
-        if (player.inputs.IsSprinting && player.stats.CanSprint)
-        {
-            player.MovementSM.ChangeState(new RunState(player));
-        }
+        // No iniciamos RunState explícito aquí: el WalkState manejará sprint internamente
         if (input.sqrMagnitude > 0.01f)
         {
             player.MovementSM.ChangeState(new WalkState(player));

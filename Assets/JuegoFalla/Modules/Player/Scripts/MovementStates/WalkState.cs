@@ -20,15 +20,19 @@ public class WalkState : MovementBaseState
         player.anim.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
 
         // Movemos al personaje usando el MovementController en modo FP
-        movementController.MoveFP(input, player.statsConfig.walkSpeed, player.MainCameraTransform);
+        float speed = player.inputs.IsSprinting && player.stats.CanSprint ? player.statsConfig.sprintSpeed : player.statsConfig.walkSpeed;
+        movementController.MoveFP(input, speed, player.MainCameraTransform);
+        // Si estamos sprintando, consumimos stamina
+        if (player.inputs.IsSprinting && player.stats.CanSprint)
+        {
+            player.stats.ConsumeStamina(player.statsConfig.staminaBurnRate);
+        }
         if (input == Vector2.zero)
         {
             player.MovementSM.ChangeState(new IdleState(player));
         }
-        if (player.inputs.IsSprinting && player.stats.CanSprint)
-        {
-            player.MovementSM.ChangeState(new RunState(player));
-        }
+        // Nota: fuimos orientados a usar FP. Eliminamos la transición explícita a RunState
+        // porque ahora WalkState gestiona sprinting internamente (evitamos duplicar lógica).
 
 
     }
