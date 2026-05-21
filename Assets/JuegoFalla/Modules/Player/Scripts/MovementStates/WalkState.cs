@@ -28,6 +28,12 @@ public class WalkState : MovementBaseState
         // Movemos al personaje velocidad de caminata
         movementController.MoveFP(input, player.statsConfig.walkSpeed, player.MainCameraTransform);
 
+        // Regenerar stamina si no está sprintando
+        if (!player.inputs.IsSprinting)
+        {
+            player.stats.RegenerateStamina(player.statsConfig.staminaRegenRate, player.statsConfig.maxStamina);
+        }
+
         if (input == Vector2.zero)
         {
             player.MovementSM.ChangeState(new IdleState(player));

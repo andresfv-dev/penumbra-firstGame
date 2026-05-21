@@ -5,8 +5,7 @@ using System;
 [CreateAssetMenu(menuName = "Project/Input Reader")]
 public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
 {
-    // Eventos para acciones discretas (Saltar, Disparar)
-    public event Action JumpEvent = delegate { };
+    // Eventos para acciones discretas (Disparar, Interactuar)
     public event Action FireEvent = delegate { };
     public event Action InteractEvent = delegate { };
 
@@ -32,7 +31,6 @@ public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
 
     // Implementación de la interfaz generada por Unity
     public void OnMove(InputAction.CallbackContext context) => MoveValue = context.ReadValue<Vector2>();
-    public void OnJump(InputAction.CallbackContext context) { if (context.performed) JumpEvent.Invoke(); }
     public void OnFire(InputAction.CallbackContext context) { if (context.performed) FireEvent.Invoke(); }
     public void OnAttack(InputAction.CallbackContext context) { IsAttacking = context.ReadValueAsButton(); }
 
