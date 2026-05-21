@@ -28,6 +28,9 @@ public class IdleState : MovementBaseState
                 player.MovementSM.ChangeState(new WalkState(player));
             }
         }
+
+        // Regenerar stamina mientras está en Idle
+        player.stats.RegenerateStamina(player.statsConfig.staminaRegenRate, player.statsConfig.maxStamina);
     }
 
     public override void Exit()

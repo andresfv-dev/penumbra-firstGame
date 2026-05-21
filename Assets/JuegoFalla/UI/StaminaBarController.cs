@@ -21,6 +21,7 @@ public class StaminaBarController : MonoBehaviour
     public float smoothSpeed = 10f;
 
     float shownNormalized = 1f;
+    float originalWidth = -1f; // guardamos el ancho inicial configurado en el editor
 
     void Start()
     {
@@ -29,6 +30,17 @@ public class StaminaBarController : MonoBehaviour
         if (statsConfig == null && playerStats != null) Debug.LogWarning("StaminaBarController: statsConfig no asignado.");
 
         if (playerStats != null) playerStats.OnStaminaChanged += OnStaminaChanged;
+
+        // Guardar el ancho original tal como está en el editor; no reasignar tamaño inicial
+        if (fill != null)
+        {
+            originalWidth = fill.sizeDelta.x;
+            if (originalWidth <= 0f && container != null)
+            {
+                // fallback si el diseñador no puso sizeDelta: usar la mitad del container
+                originalWidth = container.rect.width;
+            }
+        }
     }
 
     void Update()
@@ -38,15 +50,19 @@ public class StaminaBarController : MonoBehaviour
         float target = Mathf.Clamp01(playerStats.currentStamina / statsConfig.maxStamina);
         shownNormalized = Mathf.MoveTowards(shownNormalized, target, Time.deltaTime * smoothSpeed);
 
-        float totalWidth = container.rect.width;
+        if (originalWidth <= 0f)
+        {
+            // Seguridad: si por alguna razón no tenemos originalWidth calculado, usamos container
+            originalWidth = (container != null) ? container.rect.width : 100f;
+        }
+
         float clamped = Mathf.Max(minWidthFraction, shownNormalized);
-        float newWidth = totalWidth * clamped;
+        float newWidth = originalWidth * clamped;
 
         Vector2 size = fill.sizeDelta;
         size.x = newWidth;
         fill.sizeDelta = size;
-
-        // Centrar fill: asumiendo anchors centrados, anchoredPosition = 0
+        // Mantener centrado
         fill.anchoredPosition = Vector2.zero;
     }
 
@@ -64,10 +80,13 @@ public class StaminaBarController : MonoBehaviour
     public void SetNormalizedInstant(float normalized)
     {
         shownNormalized = Mathf.Clamp01(normalized);
-        if (container == null || fill == null) return;
-        float totalWidth = container.rect.width;
+        if (fill == null) return;
+        if (originalWidth <= 0f)
+        {
+            originalWidth = (container != null) ? container.rect.width : fill.sizeDelta.x;
+        }
         float clamped = Mathf.Max(minWidthFraction, shownNormalized);
-        float newWidth = totalWidth * clamped;
+        float newWidth = originalWidth * clamped;
         Vector2 size = fill.sizeDelta;
         size.x = newWidth;
         fill.sizeDelta = size;
