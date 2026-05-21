@@ -20,6 +20,15 @@ public class PlayerStats : MonoBehaviour
         currentStamina = Mathf.Min(maxStamina, currentStamina + amount * Time.deltaTime);
     }
 
+    // Evento simple para notificar cambios de stamina (puede ser útil para UI)
+    public event System.Action<float> OnStaminaChanged = delegate { };
+
+    // Llamar después de cada cambio significativo en stamina
+    private void LateUpdate()
+    {
+        OnStaminaChanged.Invoke(currentStamina);
+    }
+
     public void Awake()
     { }
 }
