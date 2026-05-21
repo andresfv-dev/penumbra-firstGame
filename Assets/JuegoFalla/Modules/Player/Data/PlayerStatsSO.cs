@@ -13,7 +13,8 @@ public class PlayerStatsSO : ScriptableObject
     public float maxStamina = 100f;
     public float walkSpeed = 5f;
     public float sprintSpeed = 8f;
-    public float jumpForce = 5f;
+    // Eliminado jumpForce porque no se soporta salto en la experiencia FP actual
+    // public float jumpForce = 5f;
     public float maxHunger = 100f;
     public float maxThirst = 100f;
 

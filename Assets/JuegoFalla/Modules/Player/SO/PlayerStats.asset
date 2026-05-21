@@ -15,8 +15,7 @@ MonoBehaviour:
   maxHealth: 100
   maxStamina: 100
   walkSpeed: 5
-  sprintSpeed: 8
-  jumpForce: 5
+  sprintSpeed: 20
   maxHunger: 100
   maxThirst: 100
   staminaBurnRate: 20

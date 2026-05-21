@@ -52,8 +52,26 @@ public class MovementController : MonoBehaviour
 
         // 5. Mover
         characterController.Move(desiredDirection * speed * Time.deltaTime);
+    }
 
-        ApplyGravity();
+    // Movimiento para First-Person: NO rota el transform del jugador,
+    // se mueve relativo a la orientación de la cámara.
+    public void MoveFP(Vector2 input, float speed, Transform cameraTransform)
+    {
+        if (input.sqrMagnitude < 0.01f) return;
+
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+
+        forward.y = 0;
+        right.y = 0;
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 desiredDirection = forward * input.y + right * input.x;
+
+        // En FP no rotamos el transform del jugador; la cámara controla la orientación
+        characterController.Move(desiredDirection * speed * Time.deltaTime);
     }
 
     public void ApplyGravity()

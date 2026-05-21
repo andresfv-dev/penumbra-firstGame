@@ -11,11 +11,34 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private Transform interactionPoint;
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Transform mainCameraTransform; // Necesitamos el transform de la cámara
+    [SerializeField] private InteractionPromptUI promptUI;
 
     private IInteractable _currentInteractable;
 
     private void OnEnable() => playerController.inputs.InteractEvent += HandleInteract;
     private void OnDisable() => playerController.inputs.InteractEvent -= HandleInteract;
+
+    private void Awake()
+    {
+        // Auto-assign camera transform if not set in inspector
+        if (mainCameraTransform == null && playerController != null)
+        {
+            mainCameraTransform = playerController.MainCameraTransform;
+        }
+
+        if (mainCameraTransform == null && Camera.main != null)
+        {
+            mainCameraTransform = Camera.main.transform;
+        }
+
+        // If interactionPoint is not assigned, try to create or find one as child of camera
+        if (interactionPoint == null && mainCameraTransform != null)
+        {
+            // Try to find a child named "InteractionPoint" under the camera
+            var t = mainCameraTransform.Find("InteractionPoint");
+            if (t != null) interactionPoint = t;
+        }
+    }
 
     private void Update()
     {
@@ -63,11 +86,16 @@ public class PlayerInteraction : MonoBehaviour
             {
                 _currentInteractable = interactable;
                 Debug.Log($"<color=cyan>Objetivo:</color> {_currentInteractable.interactionPrompt}");
+                if (promptUI != null)
+                {
+                    promptUI.Show(_currentInteractable.interactionPrompt);
+                }
             }
         }
         else
         {
             _currentInteractable = null;
+            if (promptUI != null) promptUI.Hide();
         }
     }
 

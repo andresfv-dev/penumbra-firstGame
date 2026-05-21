@@ -15,22 +15,29 @@ public class WalkState : MovementBaseState
     {
         //Leemos el input desde el PlayerController
         Vector2 input = player.inputs.MoveValue;
-        float inputMagnitude = input.magnitude;
 
         player.anim.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
 
-        //Movemos al personaje usando el MovementController
-        movementController.Move(input, player.statsConfig.walkSpeed, player.MainCameraTransform);
+        // Si el jugador quiere sprintar y tiene stamina, transicionar a RunState
+        if (player.inputs.IsSprinting && player.stats.CanSprint)
+        {
+            player.MovementSM.ChangeState(new RunState(player));
+            return;
+        }
+
+        // Movemos al personaje velocidad de caminata
+        movementController.MoveFP(input, player.statsConfig.walkSpeed, player.MainCameraTransform);
+
+        // Regenerar stamina si no está sprintando
+        if (!player.inputs.IsSprinting)
+        {
+            player.stats.RegenerateStamina(player.statsConfig.staminaRegenRate, player.statsConfig.maxStamina);
+        }
+
         if (input == Vector2.zero)
         {
             player.MovementSM.ChangeState(new IdleState(player));
         }
-        if (player.inputs.IsSprinting && player.stats.CanSprint)
-        {
-            player.MovementSM.ChangeState(new RunState(player));
-        }
-
-
     }
 
     public override void Exit()
@@ -40,9 +47,6 @@ public class WalkState : MovementBaseState
 
     public override void FixedUpdate()
     {
-        // Aquí iría la lógica de movimiento, por ejemplo:
-        // movementController.Move(player.Inputs.MovementInput);
+        // No se necesita lógica adicional aquí; MoveFP se llama desde Update
     }
-
-
 }

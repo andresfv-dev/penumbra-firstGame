@@ -14,28 +14,23 @@ public class RunState : MovementBaseState
     {
         Vector2 input = player.inputs.MoveValue;
 
-        // 1. Condición de salida: Dejó de moverse
+        // Si no hay input, volvemos a Idle
         if (input == Vector2.zero)
         {
             player.MovementSM.ChangeState(new IdleState(player));
             return;
         }
 
-        // 2. Condición de salida: Soltó el botón o se cansó
-        // Nota: player.Stats es un COMPONENTE, no el SO directamente
-        if (!player.inputs.IsSprinting || player.stats.currentStamina <= 0)
+        // Si no está sprintando o se quedó sin stamina, volvemos a WalkState
+        if (!player.inputs.IsSprinting || !player.stats.CanSprint)
         {
             player.MovementSM.ChangeState(new WalkState(player));
             return;
         }
 
-        // 3. Ejecutar Movimiento
-        movementController.Move(input, player.statsConfig.sprintSpeed, player.MainCameraTransform);
-
-        // 4. Actualizar Animator (Normalizado: 1 = Correr)
+        // Ejecutar movimiento a velocidad de sprint y consumir stamina
+        movementController.MoveFP(input, player.statsConfig.sprintSpeed, player.MainCameraTransform);
         player.anim.SetFloat("Speed", 1f, 0.1f, Time.deltaTime);
-
-        // 5. Consumir Estamina
         player.stats.ConsumeStamina(player.statsConfig.staminaBurnRate);
     }
 

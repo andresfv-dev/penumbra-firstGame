@@ -100,3 +100,6 @@ InitTestScene*.unity*
 
 .vscode/
 *.slnx
+
+# Agent skill registry (auto-generated)
+.atl/
